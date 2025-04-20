@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+}
+
+.editable-cell:focus {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+}
+
+.dirty-row {
+  background-color: rgba(251, 191, 36, 0.1);
+}
+
+.error {
+  color: #ef4444;
+}
+
+.success {
+  color: #10b981;
+} 

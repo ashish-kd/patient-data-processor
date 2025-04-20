@@ -1,0 +1,5 @@
+EHR ID,Patient Name,Email,Phone,Referring Provider
+123,John A,hello@example.com,1234567890,Josep Martin
+456,Emily B,,,
+789,John C,beta@example.com,123-456-6756,Josephine Appleseed
+102,Emily D,gama@example.com,,Dr. Joseph Martin MD
