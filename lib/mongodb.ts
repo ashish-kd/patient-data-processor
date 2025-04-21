@@ -1,5 +1,9 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
+declare const env: { MONGODB_URI?: string };
+
+console.log('NODE_ENV:', process.env.MONGODB_URI);
+// Ensure we have the URI from Wrangler’s vars/secrets
 if (!process.env.MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable');
 }
@@ -17,10 +21,10 @@ let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
 if (process.env.NODE_ENV === 'development') {
-  // In development mode, use a global variable so that the value
-  // is preserved across module reloads caused by HMR (Hot Module Replacement).
+  // In development with Next.js (Node), you still get NODE_ENV.
+  // Use a global to preserve the client across HMR reloads.
   let globalWithMongo = global as typeof globalThis & {
-    _mongoClientPromise?: Promise<MongoClient>
+    _mongoClientPromise?: Promise<MongoClient>;
   };
 
   if (!globalWithMongo._mongoClientPromise) {
@@ -29,28 +33,24 @@ if (process.env.NODE_ENV === 'development') {
   }
   clientPromise = globalWithMongo._mongoClientPromise;
 } else {
-  // In production mode, it's best to not use a global variable.
+  // In the Cloudflare Worker (production), just connect once.
   client = new MongoClient(uri, options);
   clientPromise = client.connect();
 }
 
-// Export a module-scoped MongoClient promise. By doing this in a
-// separate module, the client can be shared across functions.
 export default clientPromise;
 
-// Helper function to get database instance
 export async function getDb() {
   const client = await clientPromise;
   return client.db();
 }
 
-// Helper function to get patients collection
 export async function getPatientsCollection() {
   const db = await getDb();
   return db.collection('patients');
 }
 
-// Log connection status
+// Log connection status (optional)
 clientPromise
   .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Failed to connect to MongoDB', err)); 
+  .catch(err => console.error('Failed to connect to MongoDB', err));

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Table, Row } from '@tanstack/react-table'
 import {
   useReactTable,
   getCoreRowModel,
@@ -69,7 +70,7 @@ const PatientTable: React.FC<PatientTableProps> = ({ data = [], columns = [], is
     const baseColumns = [
       {
         id: 'select',
-        header: ({ table }) => (
+        header: ({ table }: { table: Table<any> }) => (
           <input
             type="checkbox"
             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -77,7 +78,7 @@ const PatientTable: React.FC<PatientTableProps> = ({ data = [], columns = [], is
             onChange={table.getToggleAllRowsSelectedHandler()}
           />
         ),
-        cell: ({ row }) => (
+        cell: ({ row }: { row: Row<any> }) => (
           <input
             type="checkbox"
             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
